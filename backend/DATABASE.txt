@@ -1,0 +1,34 @@
+CẤU HÌNH CƠ SỞ DỮ LIỆU — TIKI CLONE API
+========================================
+
+1) MẶC ĐỊNH (KHUYẾN NGHỊ CHO DEV): SQLite — một file
+   - Trong backend/.env đặt:
+     DATABASE_URL="file:./dev.db"
+   - Đường dẫn tính từ thư mục prisma/ → file thực tế: backend/prisma/dev.db
+   - Tạo / cập nhật bảng + dữ liệu mẫu:
+       cd backend
+       npx prisma db push
+       npm run db:seed
+
+2) MySQL (tùy chọn): dùng file SQL chuẩn trong repo
+   - prisma/mysql/mysql_workbench_schema_and_seed.sql
+   - Mở Workbench / mysql CLI, chạy toàn bộ file (tạo DB tiki, bảng, seed + admin).
+   - Sau đó trong backend/.env:
+     DATABASE_URL="mysql://USER:PASSWORD@localhost:3306/tiki"
+   - Trong prisma/schema.prisma phải đổi lại:
+       datasource db { provider = "mysql" url = env("DATABASE_URL") }
+     và khôi phục kiểu @db.Text / index description(length:191) theo bản MySQL trước đó,
+     rồi: npx prisma generate && npx prisma db pull (hoặc chỉnh tay cho khớp).
+
+3) Docker MySQL (tùy chọn): từ thư mục gốc WebService
+     docker compose up -d
+   Mật khẩu root mặc định trong compose: 123456, database: tiki.
+
+4) Frontend proxy tới API: http://localhost:4000
+   - Luôn chạy backend: cd backend && npm run dev
+   - Hoặc từ thư mục gốc: npm run dev (chạy API + web cùng lúc nếu đã cài dependency gốc).
+
+5) Lưu dữ liệu khi dùng trang quản trị (thêm/sửa/xóa):
+   - Mọi thao tác CRUD qua API /api/admin/* được Prisma ghi trực tiếp vào CSDL
+     trỏ bởi DATABASE_URL (file SQLite hoặc MySQL tùy cấu hình).
+   - Backup: copy file prisma/dev.db (SQLite) hoặc dump MySQL định kỳ.

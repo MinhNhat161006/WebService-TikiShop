@@ -1,0 +1,182 @@
+.footer {
+  margin-top: 32px;
+}
+
+.top {
+  background: #f7f8fa;
+  border-top: 1px solid var(--border);
+  padding: 32px 0 28px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.col {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.heading {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.headingSp {
+  margin-top: 20px;
+}
+
+.hotline {
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+.hotline a {
+  color: var(--tiki-blue);
+  font-weight: 700;
+  text-decoration: none;
+}
+.hotline a:hover {
+  text-decoration: underline;
+}
+
+.small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.links li {
+  margin-bottom: 8px;
+}
+
+.links a {
+  color: var(--muted);
+}
+.links a:hover {
+  color: var(--tiki-blue);
+}
+
+.payRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.payBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  padding: 6px 10px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #555;
+}
+
+.appHint {
+  margin: 0 0 8px;
+  font-size: 12px;
+}
+
+.qr {
+  width: 96px;
+  height: 96px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px;
+}
+
+.qrInner {
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(90deg, #333 0, #333 4px, #fff 4px, #fff 8px),
+    repeating-linear-gradient(0deg, #333 0, #333 4px, #fff 4px, #fff 8px);
+  background-size: 8px 8px;
+  opacity: 0.15;
+  border-radius: 2px;
+}
+
+.social {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.soc {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.cert {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.bottom {
+  background: linear-gradient(180deg, #dfe0e8 0%, #d4d5de 100%);
+  border-top: 1px solid rgb(0 0 0 / 5%);
+  padding: 16px 0;
+  text-align: center;
+}
+
+.company {
+  margin: 0 0 10px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #5c5c66;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.copy {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.copy a {
+  color: var(--tiki-blue);
+}
+.copy a:hover {
+  text-decoration: underline;
+}

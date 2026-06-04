@@ -1,0 +1,15 @@
+# MySQL tùy chọn (khi bạn dùng MySQL thay vì SQLite file prisma/dev.db).
+# Chạy từ thư mục gốc: docker compose up -d
+# DATABASE_URL ví dụ: mysql://root:123456@localhost:3306/tiki
+# Sau đó cần schema Prisma provider = mysql — xem backend/DATABASE.txt
+
+services:  mysql:
+    image: mysql:8.0
+    container_name: tiki-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_DATABASE: tiki
+    ports:
+      - "3306:3306"
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]

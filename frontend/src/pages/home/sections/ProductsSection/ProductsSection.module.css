@@ -1,0 +1,41 @@
+.section {
+  padding-bottom: var(--section-y);
+}
+
+.loadMoreButton {
+  border: 1px solid var(--tiki-blue);
+  background: #fff;
+  color: var(--tiki-blue);
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.2s;
+}
+
+.loadMoreButton:hover:not(:disabled) {
+  background: var(--tiki-blue);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.loadMoreButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 188px), 1fr));
+  gap: clamp(10px, 1.8vw, 14px);
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+}

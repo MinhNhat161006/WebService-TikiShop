@@ -1,0 +1,168 @@
+.heroWrap {
+  background: linear-gradient(180deg, #fff 0%, #fafbff 55%, var(--tiki-bg) 100%);
+  padding: var(--page-y) 0 clamp(12px, 2vw, 20px);
+}
+
+.heroBannerWrap {
+  min-width: 0;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(200px, min(32vw, 300px));
+  gap: clamp(14px, 2.5vw, 24px);
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+.heroBanner {
+  background:
+    radial-gradient(ellipse 120% 80% at 100% 0%, rgb(255 255 255 / 18%) 0%, transparent 55%),
+    linear-gradient(125deg, #ff6b35 0%, #ff424e 42%, #e11d48 100%);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: clamp(22px, 4vw, 36px) clamp(20px, 3.5vw, 36px) clamp(26px, 4vw, 40px);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+  min-height: min(220px, 28vw);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.heroBanner::after {
+  content: "";
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 180px;
+  height: 180px;
+  background: rgb(255 255 255 / 12%);
+  border-radius: 50%;
+}
+
+.heroTag {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.95;
+  letter-spacing: 0.02em;
+}
+
+.heroTitle {
+  margin: 0 0 8px;
+  font-size: clamp(1.45rem, 3.2vw + 0.6rem, 2.05rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  max-width: 18ch;
+}
+
+.heroDesc {
+  margin: 0 0 clamp(16px, 3vw, 24px);
+  font-size: clamp(13px, 1.1vw, 15px);
+  opacity: 0.95;
+  line-height: 1.5;
+  max-width: 36ch;
+}
+
+.heroCtas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: var(--tiki-orange);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 22px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+}
+.btnPrimary:hover {
+  filter: brightness(1.05);
+}
+
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(255 255 255 / 65%);
+  color: #fff;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+}
+.btnGhost:hover {
+  background: rgb(255 255 255 / 12%);
+}
+
+.heroSide {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.5vw, 14px);
+}
+
+.miniCard {
+  flex: 1;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: clamp(12px, 2vw, 16px) clamp(14px, 2.2vw, 18px);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text);
+  transition:
+    box-shadow 0.2s,
+    transform 0.15s;
+}
+.miniCard:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.miniCard strong {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.miniCard span:last-child {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.miniBadge {
+  align-self: flex-start;
+  background: var(--tiki-blue-soft);
+  color: var(--tiki-blue);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.miniBadge2 {
+  align-self: flex-start;
+  background: #fff0f1;
+  color: var(--tiki-orange);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}

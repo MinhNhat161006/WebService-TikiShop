@@ -1,0 +1,304 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  AUDITOR
+  STORE_MANAGER
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique(map: "User_email_key")
+  name      String
+  phone     String?
+  password  String
+  role      UserRole   @default(USER)
+  createdAt DateTime   @default(now())
+  cartItems CartItem[]
+  orders    Order[]
+
+  @@map("user")
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String
+  slug     String    @unique(map: "Category_slug_key")
+  icon     String?
+  products Product[]
+
+  @@map("category")
+}
+
+model Product {
+  id                 String              @id @default(cuid())
+  createdAt          DateTime            @default(now())
+  name               String
+  slug               String              @unique(map: "Product_slug_key")
+  sku                String?             @unique(map: "Product_sku_key")
+  barcode            String?             @unique(map: "Product_barcode_key")
+  description        String
+  price              Int
+  listPrice          Int?
+  image              String
+  rating             Float               @default(4.5)
+  reviewCount        Int                 @default(0)
+  sold               Int                 @default(0)
+  badge              String?
+  brand              String?
+  tags               String?
+  categoryId         String
+  category           Category            @relation(fields: [categoryId], references: [id])
+  cartItems          CartItem[]
+  orderItems         OrderItem[]
+  branchProducts     BranchProduct[]
+  purchaseOrderItems PurchaseOrderItem[]
+  goodsReceiptItems  GoodsReceiptItem[]
+  batches            InventoryBatch[]
+  ledgers            InventoryLedger[]
+  stockTransferItems StockTransferItem[]
+
+  @@index([name], map: "Product_name_idx")
+  @@index([description], map: "Product_description_idx")
+  @@index([brand], map: "Product_brand_idx")
+  @@index([categoryId], map: "Product_categoryId_idx")
+  @@index([price], map: "Product_price_idx")
+  @@index([rating], map: "Product_rating_idx")
+  @@index([sold], map: "Product_sold_idx")
+  @@index([createdAt], map: "Product_createdAt_idx")
+  @@map("product")
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  userId    String
+  productId String
+  quantity  Int     @default(1)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId], map: "CartItem_userId_productId_key")
+  @@index([productId], map: "CartItem_productId_fkey")
+  @@map("cartitem")
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  userId    String
+  branchId  String?
+  status    String      @default("pending")
+  total     Int
+  address   String
+  phone     String
+  createdAt DateTime    @default(now())
+  user      User        @relation(fields: [userId], references: [id])
+  branch    Branch?     @relation(fields: [branchId], references: [id])
+  items     OrderItem[]
+
+  @@index([userId], map: "Order_userId_fkey")
+  @@map("order")
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Int
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId], map: "OrderItem_orderId_fkey")
+  @@index([productId], map: "OrderItem_productId_fkey")
+  @@map("orderitem")
+}
+
+model Branch {
+  id              String            @id @default(cuid())
+  name            String
+  address         String
+  phone           String
+  branchProducts  BranchProduct[]
+  batches         InventoryBatch[]
+  ledgers         InventoryLedger[]
+  orders          Order[]
+  goodsReceipts   GoodsReceipt[]
+  sourceTransfers StockTransfer[]   @relation("SourceBranch")
+  destTransfers   StockTransfer[]   @relation("DestBranch")
+
+  @@map("branch")
+}
+
+model Supplier {
+  id             String          @id @default(cuid())
+  name           String
+  code           String          @unique
+  contactName    String?
+  phone          String
+  email          String
+  address        String
+  purchaseOrders PurchaseOrder[]
+  batches        InventoryBatch[]
+
+  @@map("supplier")
+}
+
+model BranchProduct {
+  id        String  @id @default(cuid())
+  branchId  String
+  productId String
+  stock     Int     @default(0)
+  minStock  Int     @default(10)
+  branch    Branch  @relation(fields: [branchId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@unique([branchId, productId])
+  @@map("branch_product")
+}
+
+enum POStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  RECEIVING
+  COMPLETED
+  CANCELLED
+}
+
+model PurchaseOrder {
+  id            String              @id @default(cuid())
+  poNumber      String              @unique
+  supplierId    String
+  status        POStatus            @default(DRAFT)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  approvedById  String?
+  approvedAt    DateTime?
+  supplier      Supplier            @relation(fields: [supplierId], references: [id])
+  items         PurchaseOrderItem[]
+  goodsReceipts GoodsReceipt[]
+
+  @@map("purchase_order")
+}
+
+model PurchaseOrderItem {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  productId       String
+  quantityOrdered Int
+  pricePerUnit    Int
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  product         Product       @relation(fields: [productId], references: [id])
+
+  @@unique([purchaseOrderId, productId])
+  @@map("purchase_order_item")
+}
+
+model GoodsReceipt {
+  id              String             @id @default(cuid())
+  grNumber        String             @unique
+  purchaseOrderId String
+  branchId        String
+  receivedById    String
+  receivedDate    DateTime           @default(now())
+  purchaseOrder   PurchaseOrder      @relation(fields: [purchaseOrderId], references: [id])
+  branch          Branch             @relation(fields: [branchId], references: [id])
+  items           GoodsReceiptItem[]
+
+  @@map("goods_receipt")
+}
+
+model GoodsReceiptItem {
+  id             String           @id @default(cuid())
+  goodsReceiptId String
+  productId      String
+  qtyReceived    Int
+  qtyDamaged     Int              @default(0)
+  goodsReceipt   GoodsReceipt     @relation(fields: [goodsReceiptId], references: [id], onDelete: Cascade)
+  product        Product          @relation(fields: [productId], references: [id])
+  batches        InventoryBatch[]
+
+  @@map("goods_receipt_item")
+}
+
+model InventoryBatch {
+  id                 String           @id @default(cuid())
+  batchNumber        String           @unique
+  goodsReceiptItemId String
+  productId          String
+  supplierId         String
+  branchId           String
+  receivedDate       DateTime         @default(now())
+  mfgDate            DateTime
+  expiryDate         DateTime
+  initialQty         Int
+  remainingQty       Int
+  goodsReceiptItem   GoodsReceiptItem @relation(fields: [goodsReceiptItemId], references: [id])
+  product            Product          @relation(fields: [productId], references: [id])
+  supplier           Supplier         @relation(fields: [supplierId], references: [id])
+  branch             Branch           @relation(fields: [branchId], references: [id])
+  ledgers            InventoryLedger[]
+
+  @@index([productId, expiryDate])
+  @@map("inventory_batch")
+}
+
+enum LedgerMovementType {
+  PURCHASE_RECEIPT
+  SALE
+  RETURN_TO_SUPPLIER
+  STOCK_TRANSFER_IN
+  STOCK_TRANSFER_OUT
+  WASTE
+  ADJUSTMENT
+}
+
+model InventoryLedger {
+  id           String             @id @default(cuid())
+  timestamp    DateTime           @default(now())
+  productId    String
+  branchId     String
+  batchId      String
+  movementType LedgerMovementType
+  qtyChange    Int
+  balanceAfter Int
+  sourceDocId  String
+  product      Product            @relation(fields: [productId], references: [id])
+  branch       Branch             @relation(fields: [branchId], references: [id])
+  batch        InventoryBatch     @relation(fields: [batchId], references: [id])
+
+  @@map("inventory_ledger")
+}
+
+model StockTransfer {
+  id             String              @id @default(cuid())
+  transferNumber String              @unique
+  srcBranchId    String
+  destBranchId   String
+  status         String              @default("PENDING")
+  createdAt      DateTime            @default(now())
+  srcBranch      Branch              @relation("SourceBranch", fields: [srcBranchId], references: [id])
+  destBranch     Branch              @relation("DestBranch", fields: [destBranchId], references: [id])
+  items          StockTransferItem[]
+
+  @@map("stock_transfer")
+}
+
+model StockTransferItem {
+  id              String        @id @default(cuid())
+  stockTransferId String
+  productId       String
+  quantity        Int
+  stockTransfer   StockTransfer @relation(fields: [stockTransferId], references: [id], onDelete: Cascade)
+  product         Product       @relation(fields: [productId], references: [id])
+
+  @@map("stock_transfer_item")
+}

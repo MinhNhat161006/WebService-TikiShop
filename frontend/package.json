@@ -1,0 +1,29 @@
+{
+  "name": "tiki-clone-web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "build:readable": "tsc -b && vite build --mode development",
+    "preview": "vite preview",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"index.html\" \"vite.config.ts\"",
+    "format:dist": "prettier --write \"dist/assets/**/*.js\" \"dist/assets/**/*.css\" \"dist/assets/css/**/*.css\""
+  },
+  "dependencies": {
+    "framer-motion": "^12.38.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.4.0",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "prettier": "^3.8.3",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.3"
+  }
+}
